@@ -1,0 +1,7 @@
+node_modules
+
+dist/
+.secret
+*/.temp/
+
+AI_INSTRUCTIONS*
