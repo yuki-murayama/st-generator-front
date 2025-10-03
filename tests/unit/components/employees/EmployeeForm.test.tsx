@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { EmployeeForm } from './EmployeeForm'
-import { Employee } from '../../types'
+import { EmployeeForm } from '@/components/employees/EmployeeForm'
+import { Employee } from '@/types/employee'
 
 const mockEmployee: Employee = {
   id: '1',

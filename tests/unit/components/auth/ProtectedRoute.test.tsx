@@ -2,15 +2,15 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import ProtectedRoute from './ProtectedRoute'
-import { AuthProvider } from '../../contexts/AuthContext'
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 // Mock functions
 const mockGetCurrentUser = vi.fn()
 const mockOnAuthStateChange = vi.fn()
 
 // Mock Supabase auth module
-vi.mock('../../lib/supabase', () => {
+vi.mock('@/lib/supabase', () => {
   return {
     auth: {
       getCurrentUser: () => mockGetCurrentUser(),
@@ -56,6 +56,8 @@ const renderWithProviders = (component: React.ReactElement, initialRoute = '/') 
 describe('ProtectedRoute', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // Ensure VITE_SKIP_AUTH is not set to test actual authentication behavior
+    vi.stubEnv('VITE_SKIP_AUTH', 'false')
   })
 
   it('renders children when user is authenticated', async () => {

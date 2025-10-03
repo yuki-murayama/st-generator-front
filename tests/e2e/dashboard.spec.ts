@@ -1,10 +1,14 @@
 import { test, expect } from '@playwright/test'
+import { setupAuth } from './helpers'
 import { getSupabaseClient } from './supabase-helper'
 
 const supabase = getSupabaseClient()
 
 test.describe('ダッシュボード統計情報', () => {
   test.beforeEach(async ({ page }) => {
+    // Authenticate before each test
+    await setupAuth(page)
+
     // Navigate to dashboard (no authentication required in dev mode)
     await page.goto('/')
 

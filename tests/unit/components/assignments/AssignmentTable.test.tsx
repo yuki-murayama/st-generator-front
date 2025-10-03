@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { AssignmentTable } from './AssignmentTable'
-import { AssignmentListItem } from '../../types/assignment'
+import { AssignmentTable } from '@/components/assignments/AssignmentTable'
+import { AssignmentListItem } from '@/types/assignment'
 
 const mockAssignments: AssignmentListItem[] = [
   {

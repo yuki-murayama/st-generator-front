@@ -123,9 +123,9 @@ export const SiteForm: React.FC<SiteFormProps> = ({
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-          <Grid container spacing={3} mt={1}>
+          <Grid container spacing={3} sx={{ mt: 1 }}>
             {/* 現場名 */}
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Controller
                 name="name"
                 control={control}
@@ -155,7 +155,7 @@ export const SiteForm: React.FC<SiteFormProps> = ({
             </Grid>
 
             {/* 所在地 */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Controller
                 name="location"
                 control={control}
@@ -179,7 +179,7 @@ export const SiteForm: React.FC<SiteFormProps> = ({
             </Grid>
 
             {/* 現場責任者 */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Controller
                 name="manager_name"
                 control={control}
@@ -205,7 +205,7 @@ export const SiteForm: React.FC<SiteFormProps> = ({
             </Grid>
 
             {/* 開始日 */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Controller
                 name="start_date"
                 control={control}
@@ -229,7 +229,7 @@ export const SiteForm: React.FC<SiteFormProps> = ({
             </Grid>
 
             {/* 終了日 */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Controller
                 name="end_date"
                 control={control}
@@ -251,7 +251,7 @@ export const SiteForm: React.FC<SiteFormProps> = ({
             </Grid>
 
             {/* ステータス */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Controller
                 name="status"
                 control={control}
@@ -275,7 +275,7 @@ export const SiteForm: React.FC<SiteFormProps> = ({
             </Grid>
 
             {/* 備考 */}
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Controller
                 name="description"
                 control={control}
@@ -301,7 +301,7 @@ export const SiteForm: React.FC<SiteFormProps> = ({
             </Grid>
 
             {/* ボタン */}
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Stack direction="row" spacing={2} justifyContent="flex-end">
                 <Button
                   variant="outlined"

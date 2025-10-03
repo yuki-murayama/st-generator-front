@@ -9,8 +9,7 @@ import {
   Grid,
   Autocomplete,
   Box,
-  Stack,
-  FormHelperText
+  Stack
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import {
@@ -78,7 +77,7 @@ export const AssignmentForm: React.FC<AssignmentFormProps> = ({
         site_id: assignment.site_id,
         start_date: assignment.start_date ? new Date(assignment.start_date) : null,
         end_date: assignment.end_date ? new Date(assignment.end_date) : null,
-        role: assignment.role,
+        role: assignment.role || '',
         notes: assignment.notes || ''
       })
     }
@@ -97,8 +96,8 @@ export const AssignmentForm: React.FC<AssignmentFormProps> = ({
     await onSubmit(submitData as CreateAssignmentData | UpdateAssignmentData)
   }
 
-  const getEmployeeById = (id: string) => employeeOptions.find(emp => emp.id === id)
-  const getSiteById = (id: string) => siteOptions.find(site => site.id === id)
+  const getEmployeeById = (id: string) => employeeOptions.find(emp => emp.value === id)
+  const getSiteById = (id: string) => siteOptions.find(site => site.value === id)
 
   return (
     <Card>
@@ -118,10 +117,10 @@ export const AssignmentForm: React.FC<AssignmentFormProps> = ({
                 render={({ field: { onChange, value } }) => (
                   <Autocomplete
                     options={employeeOptions}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.label}
                     value={getEmployeeById(value) || null}
                     onChange={(_, newValue) => {
-                      onChange(newValue?.id || '')
+                      onChange(newValue?.value || '')
                     }}
                     disabled={isLoading || isEdit}
                     renderInput={(params) => (
@@ -147,10 +146,10 @@ export const AssignmentForm: React.FC<AssignmentFormProps> = ({
                 render={({ field: { onChange, value } }) => (
                   <Autocomplete
                     options={siteOptions}
-                    getOptionLabel={(option) => option.name}
+                    getOptionLabel={(option) => option.label}
                     value={getSiteById(value) || null}
                     onChange={(_, newValue) => {
-                      onChange(newValue?.id || '')
+                      onChange(newValue?.value || '')
                     }}
                     disabled={isLoading || isEdit}
                     renderInput={(params) => (

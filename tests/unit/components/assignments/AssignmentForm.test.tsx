@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { AssignmentForm } from './AssignmentForm'
-import { Assignment, EmployeeOption, SiteOption } from '../../types/assignment'
+import { AssignmentForm } from '@/components/assignments/AssignmentForm'
+import { Assignment, EmployeeOption, SiteOption } from '@/types/assignment'
 
 // Mock MUI DatePicker to avoid date-fns version compatibility issues
 vi.mock('@mui/x-date-pickers/DatePicker', () => ({

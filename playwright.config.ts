@@ -3,13 +3,15 @@ import * as dotenv from 'dotenv'
 
 // Load environment variables from .env file
 dotenv.config()
+// Load test-specific environment variables
+dotenv.config({ path: '.env.test.local' })
 
 /**
  * Playwright E2E Test Configuration
  * See https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: './e2e',
+  testDir: './tests/e2e',
 
   /* Run tests in files in parallel */
   fullyParallel: true,

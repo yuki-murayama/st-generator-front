@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import LoginForm from './LoginForm'
-import { AuthProvider } from '../../contexts/AuthContext'
+import LoginForm from '@/components/auth/LoginForm'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 // Mock functions
 const mockGetCurrentUser = vi.fn()
@@ -11,7 +11,7 @@ const mockOnAuthStateChange = vi.fn()
 const mockSignIn = vi.fn()
 
 // Mock Supabase auth module
-vi.mock('../../lib/supabase', () => {
+vi.mock('@/lib/supabase', () => {
   return {
     auth: {
       getCurrentUser: () => mockGetCurrentUser(),

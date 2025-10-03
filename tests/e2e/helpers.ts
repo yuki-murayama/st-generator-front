@@ -5,6 +5,20 @@ import { Page, expect } from '@playwright/test'
  */
 
 /**
+ * Get test user credentials from environment
+ */
+export function getTestCredentials() {
+  const email = process.env.TEST_USER_EMAIL
+  const password = process.env.TEST_USER_PASSWORD
+
+  if (!email || !password) {
+    throw new Error('TEST_USER_EMAIL and TEST_USER_PASSWORD must be set in .env.test.local')
+  }
+
+  return { email, password }
+}
+
+/**
  * Login helper - performs login flow
  */
 export async function login(page: Page, email: string, password: string) {
@@ -13,16 +27,27 @@ export async function login(page: Page, email: string, password: string) {
   await page.fill('input[name="password"]', password)
   await page.click('button:has-text("ログイン")')
 
-  // Wait for navigation to complete
-  await page.waitForURL('/', { timeout: 10000 })
+  // Wait for navigation to complete (redirects to /dashboard or /)
+  await page.waitForURL(/\/(dashboard)?$/, { timeout: 10000 })
+}
+
+/**
+ * Setup authentication for tests - performs login before tests
+ */
+export async function setupAuth(page: Page) {
+  const { email, password } = getTestCredentials()
+  await login(page, email, password)
 }
 
 /**
  * Logout helper - performs logout
  */
 export async function logout(page: Page) {
-  // Click profile menu
-  await page.click('[aria-label="アカウント設定"]')
+  // Click profile menu (user menu button)
+  await page.click('[aria-label="ユーザーメニュー"]')
+
+  // Wait for menu to open
+  await page.waitForSelector('#profile-menu', { state: 'visible', timeout: 5000 })
 
   // Click logout button
   await page.click('text=ログアウト')

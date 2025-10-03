@@ -1,11 +1,14 @@
 import { test, expect } from '@playwright/test'
-import { waitForTable } from './helpers'
+import { waitForTable, setupAuth } from './helpers'
 import { getSupabaseClient } from './supabase-helper'
 
 const supabase = getSupabaseClient()
 
 test.describe('従業員管理', () => {
   test.beforeEach(async ({ page }) => {
+    // Authenticate before each test
+    await setupAuth(page)
+
     // Navigate to employees page (no auth required in dev mode)
     await page.goto('/employees')
     await page.waitForLoadState('networkidle')

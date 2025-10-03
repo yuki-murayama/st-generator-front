@@ -6,6 +6,9 @@ const supabase = getSupabaseClient()
 
 test.describe('配属管理', () => {
   test.beforeEach(async ({ page }) => {
+    // Authenticate before each test
+    await setupAuth(page)
+
     // Navigate to assignments page (no auth required in dev mode)
     await page.goto('/assignments')
     await page.waitForLoadState('networkidle')

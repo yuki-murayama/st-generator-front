@@ -30,25 +30,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Initialize auth state
   useEffect(() => {
+    let mounted = true
+    let initialized = false
+
     // Get initial user
     const initializeAuth = async () => {
       try {
         const { data, error: userError } = await auth.getCurrentUser()
+        if (!mounted) return
+
         if (userError) {
           console.error('Error getting current user:', userError)
-          setError(userError.message)
+          // Don't set error for AuthSessionMissingError - it's expected when not logged in
+          const errorMsg = userError.message || String(userError)
+          if (!errorMsg.includes('AuthSessionMissingError') && !errorMsg.includes('Auth session missing')) {
+            setError(errorMsg)
+          }
+          setUser(null)
         } else if (data.user) {
           setUser({
             id: data.user.id,
             email: data.user.email || '',
             user_metadata: data.user.user_metadata
           })
+        } else {
+          setUser(null)
         }
       } catch (err) {
         console.error('Error initializing auth:', err)
-        setError('Failed to initialize authentication')
+        if (mounted) {
+          setError('Failed to initialize authentication')
+          setUser(null)
+        }
       } finally {
-        setLoading(false)
+        initialized = true
+        if (mounted) {
+          setLoading(false)
+        }
       }
     }
 
@@ -56,6 +74,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // Listen for auth changes
     const { data: { subscription } } = auth.onAuthStateChange((user) => {
+      if (!mounted) return
+
       if (user) {
         setUser({
           id: user.id,
@@ -65,10 +85,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } else {
         setUser(null)
       }
-      setLoading(false)
+
+      // Only set loading to false if initialization is complete
+      if (initialized) {
+        setLoading(false)
+      }
     })
 
     return () => {
+      mounted = false
       subscription.unsubscribe()
     }
   }, [])

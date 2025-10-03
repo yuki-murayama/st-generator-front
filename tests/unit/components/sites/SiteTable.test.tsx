@@ -1,42 +1,45 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { EmployeeTable } from './EmployeeTable'
-import { EmployeeListItem } from '../../types/employee'
+import { SiteTable } from '@/components/sites/SiteTable'
+import { SiteListItem } from '@/types/site'
 
-const mockEmployees: EmployeeListItem[] = [
+const mockSites: SiteListItem[] = [
   {
     id: '1',
-    full_name: '山田 太郎',
-    email: 'yamada@example.com',
-    department: '開発部',
-    position: 'エンジニア',
+    name: '東京プロジェクト',
+    location: '東京都渋谷区',
+    manager_name: '山田太郎',
     status: 'active',
-    current_site: '本社',
-    hire_date: new Date('2024-01-01')
+    assigned_count: 5,
+    progress: 75,
+    start_date: new Date('2024-01-01'),
+    end_date: new Date('2024-12-31')
   },
   {
     id: '2',
-    full_name: '佐藤 花子',
-    email: 'sato@example.com',
-    department: '営業部',
-    position: '営業担当',
-    status: 'active',
-    current_site: undefined,
-    hire_date: new Date('2024-02-01')
+    name: '大阪プロジェクト',
+    location: '大阪府大阪市',
+    manager_name: '佐藤花子',
+    status: 'completed',
+    assigned_count: 3,
+    progress: 100,
+    start_date: new Date('2023-06-01'),
+    end_date: new Date('2024-05-31')
   },
   {
     id: '3',
-    full_name: '鈴木 一郎',
-    email: 'suzuki@example.com',
-    department: '管理部',
-    position: '課長',
-    status: 'inactive',
-    current_site: undefined,
-    hire_date: new Date('2023-12-01')
+    name: '福岡プロジェクト',
+    location: '福岡県福岡市',
+    manager_name: '鈴木一郎',
+    status: 'suspended',
+    assigned_count: 2,
+    progress: 50,
+    start_date: new Date('2024-03-01'),
+    end_date: new Date('2024-09-30')
   }
 ]
 
-describe('EmployeeTable', () => {
+describe('SiteTable', () => {
   const mockOnView = vi.fn()
   const mockOnEdit = vi.fn()
   const mockOnDelete = vi.fn()
@@ -47,37 +50,36 @@ describe('EmployeeTable', () => {
     vi.clearAllMocks()
   })
 
-  it('renders employee data in table', () => {
+  it('renders site data in table', () => {
     render(
-      <EmployeeTable
-        employees={mockEmployees}
+      <SiteTable
+        sites={mockSites}
         onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
       />
     )
 
-    expect(screen.getByText('山田 太郎')).toBeInTheDocument()
-    expect(screen.getByText('yamada@example.com')).toBeInTheDocument()
-    expect(screen.getByText('開発部')).toBeInTheDocument()
+    expect(screen.getByText('東京プロジェクト')).toBeInTheDocument()
+    expect(screen.getByText('東京都渋谷区')).toBeInTheDocument()
+    expect(screen.getByText('山田太郎')).toBeInTheDocument()
   })
 
   it('renders loading state with skeletons', () => {
     render(
-      <EmployeeTable
-        employees={[]}
+      <SiteTable
+        sites={[]}
         loading={true}
       />
     )
 
-    // Check for table structure even in loading state
     expect(screen.getByRole('table')).toBeInTheDocument()
   })
 
   it('renders error message', () => {
     render(
-      <EmployeeTable
-        employees={[]}
+      <SiteTable
+        sites={[]}
         error="データベースエラー"
       />
     )
@@ -85,40 +87,39 @@ describe('EmployeeTable', () => {
     expect(screen.getByText(/エラーが発生しました/i)).toBeInTheDocument()
   })
 
-  it('renders empty state when no employees', () => {
+  it('renders empty state when no sites', () => {
     render(
-      <EmployeeTable
-        employees={[]}
+      <SiteTable
+        sites={[]}
       />
     )
 
-    expect(screen.getByText(/従業員データがありません/i)).toBeInTheDocument()
+    expect(screen.getByText(/現場が見つかりません/i)).toBeInTheDocument()
   })
 
   it('calls onView when view icon is clicked', () => {
     render(
-      <EmployeeTable
-        employees={mockEmployees}
+      <SiteTable
+        sites={mockSites}
         onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
       />
     )
 
-    // Get all icon buttons (3 per row: view, edit, delete)
     const allButtons = screen.getAllByRole('button')
-    // First employee's view button is at index 0 (after sort buttons)
-    // Skip the 6 sort label buttons (name, email, department, position, status, hire_date)
-    const viewButton = allButtons[6] // First icon button
+    // headCells has 5 sortable buttons (name, location, manager_name, status, assigned_count)
+    // Progress and duration are not sortable, so 5 sort buttons total
+    const viewButton = allButtons[5] // First view button after sort buttons
     fireEvent.click(viewButton)
 
-    expect(mockOnView).toHaveBeenCalledWith(mockEmployees[0])
+    expect(mockOnView).toHaveBeenCalledWith(mockSites[0])
   })
 
   it('calls onEdit when edit icon is clicked', () => {
     render(
-      <EmployeeTable
-        employees={mockEmployees}
+      <SiteTable
+        sites={mockSites}
         onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
@@ -126,16 +127,16 @@ describe('EmployeeTable', () => {
     )
 
     const allButtons = screen.getAllByRole('button')
-    const editButton = allButtons[7] // Second icon button (edit)
+    const editButton = allButtons[6] // Second icon button (edit)
     fireEvent.click(editButton)
 
-    expect(mockOnEdit).toHaveBeenCalledWith(mockEmployees[0])
+    expect(mockOnEdit).toHaveBeenCalledWith(mockSites[0])
   })
 
   it('shows delete confirmation dialog and calls onDelete', async () => {
     render(
-      <EmployeeTable
-        employees={mockEmployees}
+      <SiteTable
+        sites={mockSites}
         onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
@@ -143,19 +144,16 @@ describe('EmployeeTable', () => {
     )
 
     const allButtons = screen.getAllByRole('button')
-    const deleteButton = allButtons[8] // Third icon button (delete)
+    const deleteButton = allButtons[7] // Third icon button (delete)
     fireEvent.click(deleteButton)
 
-    // Dialog should appear - check for dialog content with id
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeInTheDocument()
     })
 
-    // Check that the dialog contains the employee name
     const dialog = screen.getByRole('dialog')
-    expect(dialog).toHaveTextContent('山田 太郎')
+    expect(dialog).toHaveTextContent('東京プロジェクト')
 
-    // Click confirm in dialog
     const dialogButtons = screen.getAllByRole('button')
     const confirmButton = dialogButtons.find(btn => btn.textContent?.includes('削除'))
 
@@ -167,25 +165,23 @@ describe('EmployeeTable', () => {
 
   it('renders status chips with correct labels', () => {
     render(
-      <EmployeeTable
-        employees={mockEmployees}
+      <SiteTable
+        sites={mockSites}
         onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
       />
     )
 
-    const activeChips = screen.getAllByText('在籍')
-    const inactiveChips = screen.getAllByText('退職')
-
-    expect(activeChips.length).toBe(2)
-    expect(inactiveChips.length).toBe(1)
+    expect(screen.getByText('進行中')).toBeInTheDocument()
+    expect(screen.getByText('完了')).toBeInTheDocument()
+    expect(screen.getByText('中断')).toBeInTheDocument()
   })
 
   it('handles pagination', () => {
     render(
-      <EmployeeTable
-        employees={mockEmployees}
+      <SiteTable
+        sites={mockSites}
         totalCount={100}
         page={0}
         rowsPerPage={25}
@@ -193,7 +189,6 @@ describe('EmployeeTable', () => {
       />
     )
 
-    // MUI pagination - look for next page button
     const buttons = screen.getAllByRole('button')
     const nextButton = buttons.find(btn => btn.getAttribute('aria-label')?.includes('next'))
 
@@ -205,17 +200,17 @@ describe('EmployeeTable', () => {
 
   it('handles sorting', () => {
     render(
-      <EmployeeTable
-        employees={mockEmployees}
-        sortBy="full_name"
+      <SiteTable
+        sites={mockSites}
+        sortBy="name"
         sortOrder="asc"
         onSort={mockOnSort}
       />
     )
 
-    const nameHeader = screen.getByText('名前')
+    const nameHeader = screen.getByText('現場名')
     fireEvent.click(nameHeader)
 
-    expect(mockOnSort).toHaveBeenCalledWith('full_name')
+    expect(mockOnSort).toHaveBeenCalledWith('name')
   })
 })

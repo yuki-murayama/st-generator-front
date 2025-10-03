@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useEmployees, useCreateEmployee, useUpdateEmployee, useDeleteEmployee } from './useEmployees'
+import { useEmployees, useCreateEmployee, useUpdateEmployee, useDeleteEmployee } from '@/hooks/api/useEmployees'
 
 // Mock Supabase
 const mockSelect = vi.fn()
@@ -12,7 +12,7 @@ const mockEq = vi.fn()
 const mockFrom = vi.fn()
 const mockSingle = vi.fn()
 
-vi.mock('../../lib/supabase', () => {
+vi.mock('@/lib/supabase', () => {
   return {
     auth: {
       getCurrentUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),

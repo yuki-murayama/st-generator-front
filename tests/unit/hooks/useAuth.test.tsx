@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useAuth } from './useAuth'
-import { AuthProvider } from '../contexts/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 const mockGetCurrentUser = vi.fn()
 const mockSignIn = vi.fn()
 const mockSignOut = vi.fn()
 const mockOnAuthStateChange = vi.fn()
 
-vi.mock('../lib/supabase', () => {
+vi.mock('@/lib/supabase', () => {
   return {
     auth: {
       getCurrentUser: () => mockGetCurrentUser(),

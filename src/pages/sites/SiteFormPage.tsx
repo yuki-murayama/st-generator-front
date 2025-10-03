@@ -30,10 +30,11 @@ export const SiteFormPage: React.FC = () => {
 
     try {
       if (isEdit && id) {
-        await updateMutation.mutateAsync({
-          id,
-          ...(data as UpdateSiteData)
-        })
+        const updateData: UpdateSiteData = {
+          ...(data as UpdateSiteData),
+          id
+        }
+        await updateMutation.mutateAsync(updateData)
         navigate(`/sites/${id}`, { replace: true })
       } else {
         const result = await createMutation.mutateAsync(data as CreateSiteData)
