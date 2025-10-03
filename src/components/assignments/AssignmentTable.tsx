@@ -18,8 +18,7 @@ import {
 } from '@mui/material'
 import {
   Edit as EditIcon,
-  Delete as DeleteIcon,
-  Visibility as ViewIcon
+  Delete as DeleteIcon
 } from '@mui/icons-material'
 import { AssignmentListItem } from '../../types/assignment'
 import { formatDate } from '../../lib/utils'

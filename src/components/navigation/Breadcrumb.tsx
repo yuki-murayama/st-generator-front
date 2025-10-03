@@ -19,6 +19,7 @@ interface BreadcrumbItem {
 }
 
 interface BreadcrumbProps {
+  items?: { label: string; href?: string }[]
   customItems?: BreadcrumbItem[]
   maxItems?: number
   showHome?: boolean
@@ -75,6 +76,7 @@ const routeConfig: Record<string, BreadcrumbItem> = {
 }
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({
+  items,
   customItems,
   maxItems = 8,
   showHome = true
@@ -84,6 +86,14 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   const theme = useTheme()
 
   const generateBreadcrumbs = (): BreadcrumbItem[] => {
+    // Handle items prop (convert to BreadcrumbItem format)
+    if (items) {
+      return items.map(item => ({
+        label: item.label,
+        path: item.href
+      }))
+    }
+
     if (customItems) {
       return customItems
     }

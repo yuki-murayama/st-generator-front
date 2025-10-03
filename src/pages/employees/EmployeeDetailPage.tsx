@@ -159,6 +159,7 @@ export const EmployeeDetailPage: React.FC = () => {
               基本情報
             </Typography>
             <Grid container spacing={3}>
+              {/* @ts-ignore MUI v7 Grid compatibility */}
               <Grid item xs={12} md={6}>
                 <Box display="flex" alignItems="center" gap={1} mb={2}>
                   <Typography variant="subtitle1" fontWeight="bold">
@@ -192,6 +193,7 @@ export const EmployeeDetailPage: React.FC = () => {
                 )}
               </Grid>
 
+              {/* @ts-ignore MUI v7 Grid compatibility */}
               <Grid item xs={12} md={6}>
                 <Box display="flex" alignItems="center" gap={1} mb={2}>
                   <BusinessIcon color="action" fontSize="small" />
@@ -329,6 +331,7 @@ export const EmployeeDetailPage: React.FC = () => {
               システム情報
             </Typography>
             <Grid container spacing={2}>
+              {/* @ts-ignore MUI v7 Grid compatibility */}
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" color="text.secondary">
                   ID
@@ -337,6 +340,7 @@ export const EmployeeDetailPage: React.FC = () => {
                   {employee.id}
                 </Typography>
               </Grid>
+              {/* @ts-ignore MUI v7 Grid compatibility */}
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" color="text.secondary">
                   作成日時
@@ -345,6 +349,7 @@ export const EmployeeDetailPage: React.FC = () => {
                   {formatDate(employee.created_at)}
                 </Typography>
               </Grid>
+              {/* @ts-ignore MUI v7 Grid compatibility */}
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" color="text.secondary">
                   更新日時

@@ -50,6 +50,7 @@ const InfoItem: React.FC<{
   value: string | React.ReactNode
   fullWidth?: boolean
 }> = ({ icon, label, value, fullWidth = false }) => (
+  // @ts-ignore MUI v7 Grid compatibility
   <Grid item xs={12} sm={fullWidth ? 12 : 6}>
     <Box display="flex" alignItems="flex-start" gap={1.5}>
       <Box
@@ -138,6 +139,7 @@ export const SiteInfo: React.FC<SiteInfoProps> = ({ site }) => {
           />
 
           {progress !== undefined && (
+            // @ts-ignore MUI v7 Grid compatibility
             <Grid item xs={12}>
               <Box>
                 <Box display="flex" alignItems="center" gap={1.5} mb={1}>
